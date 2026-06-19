@@ -1,0 +1,114 @@
+/**
+ * Domain types — mirror of the prototype spec §3 schema.
+ * These are the contract the real backend will follow (see system-architecture doc).
+ */
+
+export type Role = "guest" | "prospect" | "agent" | "director" | "admin";
+export type AgentLevel = "agen" | "sub-agen" | "reseller";
+export type AccountStatus = "pending" | "active" | "rejected" | "suspended";
+
+export type Region = { id: string; kabupaten: string; agentId: string | null; monthlyTarget: number };
+
+export type Agent = {
+  id: string;
+  name: string;
+  level: AgentLevel;
+  parentId: string | null;
+  regionId: string | null;
+  status: AccountStatus;
+  email?: string;
+  phone?: string;
+};
+
+export type Product = { id: string; name: string; isPrivate: boolean; clientId: string | null; category?: string };
+export type Variant = { id: string; productId: string; name: string; unit: string };
+export type PriceTier = { variantId: string; level: AgentLevel | "default"; price: number };
+export type PriceOverride = { variantId: string; agentId: string; price: number };
+
+export type InventoryStatus = "available" | "consigned" | "sold_unbilled" | "paid";
+export type InventoryItem = {
+  id: string;
+  variantId: string;
+  locationType: "warehouse" | "agent";
+  locationId: string;
+  status: InventoryStatus;
+  qty: number; // owner is always Zoya — business rule, not a column
+};
+
+export type POStatus = "submitted" | "admin_review" | "director_review" | "approved" | "rejected" | "shipped";
+export type PurchaseOrder = {
+  id: string;
+  agentId: string;
+  items: { variantId: string; qty: number }[];
+  totalValue: number;
+  status: POStatus;
+  createdAt: string;
+};
+
+export type Sale = { id: string; agentId: string; variantId: string; qty: number; date: string; reportedAt: string; proofUrl?: string | null };
+
+export type BillingStatus = "unbilled" | "uploaded" | "verified" | "paid";
+export type MonthlyBilling = {
+  id: string;
+  agentId: string;
+  period: string; // "2026-06"
+  totalQty: number;
+  totalValue: number;
+  status: BillingStatus;
+  proofUrl: string | null;
+};
+
+export type ReturnStatus = "pending" | "approved" | "rejected";
+export type Return = { id: string; agentId: string; variantId: string; qty: number; evidenceUrl: string; status: ReturnStatus; reason?: string };
+
+export type MaklonStage = "lead" | "quote" | "formulation" | "production" | "qc" | "done";
+export type MaklonLead = {
+  id: string;
+  clientName: string;
+  productType: string;
+  targetVolume: number;
+  stage: MaklonStage;
+  contact: string;
+  value?: number;
+};
+
+export type ChatMessage = {
+  id: string;
+  channelId: string;
+  senderType: "customer" | "agent" | "bot" | "admin";
+  body: string;
+  attachmentUrl: string | null;
+  createdAt: string;
+};
+
+export type Notification = {
+  id: string;
+  targetId: string;
+  channel: "whatsapp" | "inapp";
+  eventType: string;
+  payload: string;
+  status: "queued" | "sent" | "delivered";
+  sentAt: string;
+};
+
+export type AuditLog = { id: string; actorId: string; action: string; entity: string; entityId: string; before: unknown; after: unknown; timestamp: string };
+
+export type RekeningInfo = {
+  bank: string;
+  accountNumber: string;
+  accountName: string;
+  notes?: string;
+};
+
+export type Settings = {
+  director_threshold: number; // Rp
+  consignment_limit: number; // Rp per agent
+  cutoff_date: number; // day of month
+  region_target: number; // botol/month
+  min_stock: Record<string, number>; // per product id
+  price_defaults: Record<string, number>; // per product id
+  rekening: RekeningInfo[]; // bank accounts for transfers
+};
+
+/** Standard API response envelope (spec §3.2 / §4). */
+export type ApiResponse<T> = { data: T; error: null } | { data: null; error: { code?: string; message: string } };

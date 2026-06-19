@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+
+  /* Accessible, on-brand focus ring for keyboard users only. */
+  :focus-visible {
+    outline: 2px solid theme('colors.brand.500');
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-200;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-300;
+  }
+}
+
+@layer utilities {
+  .mesh-bg {
+    background-color: #f8fafc;
+    background-image:
+        radial-gradient(at 80% 0%, rgba(94, 57, 224, 0.08) 0px, transparent 50%),
+        radial-gradient(at 0% 50%, rgba(94, 57, 224, 0.05) 0px, transparent 50%);
+  }
+
+  /* Warm clay-inspired canvas — used on public/prospek pages */
+  .warm-canvas {
+    background-color: #fdfbf7;
+    background-image:
+      radial-gradient(at 85% 5%, rgba(94, 57, 224, 0.07) 0px, transparent 55%),
+      radial-gradient(at 5% 80%, rgba(167, 130, 255, 0.06) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(255, 250, 240, 0.8) 0px, transparent 100%);
+  }
+
+  /* Staggered animation delays for list items */
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.10s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.20s; }
+  .stagger-5 { animation-delay: 0.25s; }
+  .stagger-6 { animation-delay: 0.30s; }
+
+  /* Glow overlay for colored cards */
+  .card-glow::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at 100% 0%, rgba(255,255,255,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+
+  .kanban-scrollbar::-webkit-scrollbar {
+    height: 6px;
+  }
+  .kanban-scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-200 hover:bg-slate-300;
+  }
+
+  /* Skeleton shimmer for loading states. */
+  .skeleton {
+    background: linear-gradient(90deg, #eef2f7 25%, #e2e8f0 37%, #eef2f7 63%);
+    background-size: 800px 100%;
+    @apply animate-shimmer rounded-lg;
+  }
+
+  /* Warm-tinted shimmer for public/prospek loading skeletons — matches warm-canvas palette */
+  .warm-shimmer {
+    background: linear-gradient(
+      105deg,
+      #f0ebe0 0%,
+      #e8e1f0 20%,
+      #ddd5f5 35%,
+      #f0ebe0 50%,
+      #e8f0eb 65%,
+      #f5eedd 80%,
+      #f0ebe0 100%
+    );
+    background-size: 900px 100%;
+    @apply animate-shimmer;
+  }
+}
+
+/* Honour reduced-motion preference globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
