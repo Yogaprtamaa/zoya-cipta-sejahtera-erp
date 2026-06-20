@@ -2,7 +2,7 @@ import { db, uid, logAudit } from "@/lib/mock-db";
 import { ok, fail, body } from "@/lib/api-helpers";
 import type { MaklonStage, Product } from "@/types";
 
-const ORDER: MaklonStage[] = ["lead", "quote", "formulation", "production", "qc", "done"];
+const ORDER: MaklonStage[] = ["consultation", "quote", "deal_dp", "formulation", "production", "qc", "done"];
 
 /** PATCH /api/maklon/[id]/stage — { stage } move pipeline; "done" mints a private SKU. */
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -11,6 +11,12 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const lead = db.maklonLeads.find((l) => l.id === id);
   if (!lead) return fail("Lead tidak ditemukan", "NOT_FOUND", 404);
   if (!ORDER.includes(stage)) return fail("Stage tidak valid", "VALIDATION_ERROR");
+
+  // Gate: cannot advance past consultation if not approved
+  if (lead.stage === "consultation" && lead.consultationStatus !== "approved") {
+    return fail("Konsultasi harus disetujui sebelum pipeline dapat dilanjutkan", "CONSULTATION_NOT_APPROVED");
+  }
+
   const before = { ...lead };
   lead.stage = stage;
 

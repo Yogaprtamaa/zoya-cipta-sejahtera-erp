@@ -6,11 +6,21 @@ export async function GET() {
   return ok({ leads: db.maklonLeads });
 }
 
-/** POST /api/maklon/lead — public lead form submission. */
+/** POST /api/maklon/lead — consultation submission from logged-in maklon client. */
 export async function POST(req: Request) {
-  const input = await body<{ clientName: string; productType: string; targetVolume?: number; contact?: string }>(req);
-  const lead = { id: uid("MKL"), clientName: input.clientName, productType: input.productType, targetVolume: input.targetVolume ?? 0, stage: "lead" as const, contact: input.contact ?? "" };
+  const input = await body<{ clientName: string; productType: string; targetVolume?: number; contact?: string; notes?: string; clientId?: string }>(req);
+  const lead = {
+    id: uid("MKL"),
+    clientName: input.clientName,
+    productType: input.productType,
+    targetVolume: input.targetVolume ?? 0,
+    stage: "consultation" as const,
+    consultationStatus: "pending" as const,
+    contact: input.contact ?? "",
+    notes: input.notes,
+    clientId: input.clientId,
+  };
   db.maklonLeads.unshift(lead);
-  logAudit("system", "create_lead", "maklon_lead", lead.id, null, lead);
+  logAudit(input.clientId ?? "system", "submit_consultation", "maklon_lead", lead.id, null, lead);
   return ok({ lead });
 }

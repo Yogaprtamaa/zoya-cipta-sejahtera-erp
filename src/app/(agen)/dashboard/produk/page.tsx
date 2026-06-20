@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Package } from "lucide-react";
 import { api } from "@/lib/api-client";
 import { DEMO_AGENT_ID } from "@/lib/demo";
+import { getClientLevel } from "@/lib/auth-mock";
 import { formatIdr } from "@/lib/format";
 import { PageHeader, Card, SkeletonTable, Badge } from "@/components/ui";
 
@@ -12,15 +13,21 @@ type Product = { id: string; name: string; category?: string; variants: Variant[
 
 export default function AgenProdukPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading]   = useState(true);
+  const [level, setLevel]       = useState("agen");
 
   useEffect(() => {
-    api.get<{ products: Product[] }>(`/produk?role=agent&agentId=${DEMO_AGENT_ID}&level=agen`).then((r) => { if (r.data) setProducts(r.data.products); setLoading(false); });
+    const level = getClientLevel();
+    setLevel(level);
+    api.get<{ products: Product[] }>(`/produk?role=agent&agentId=${DEMO_AGENT_ID}&level=${level}`).then((r) => { if (r.data) setProducts(r.data.products); setLoading(false); });
   }, []);
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Katalog & Harga" subtitle="Harga sudah disesuaikan dengan level & override khusus Anda." />
+      <PageHeader
+        title="Katalog & Harga"
+        subtitle={`Harga sudah disesuaikan untuk level ${level.replace("-", " ")} & override khusus Anda.`}
+      />
       {loading ? <SkeletonTable rows={4} /> : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p) => (

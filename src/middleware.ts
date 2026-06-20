@@ -6,15 +6,15 @@ const roleHome: Record<string, string> = {
   guest: "/",
   prospect: "/konversi",
   agent: "/dashboard",
-  director: "/direktur/dashboard",
+  klien_maklon: "/maklon-portal",
   admin: "/admin"
 };
 
 /** Which roles may enter each protected area. */
 function allowed(pathname: string, role: string): boolean {
   if (pathname.startsWith("/admin")) return role === "admin";
-  if (pathname.startsWith("/direktur")) return role === "director" || role === "admin";
   if (pathname.startsWith("/dashboard")) return role === "agent" || role === "admin";
+  if (pathname.startsWith("/maklon-portal")) return role === "klien_maklon" || role === "admin";
   if (pathname.startsWith("/konversi") || pathname.startsWith("/ajukan-agen") || pathname.startsWith("/request-maklon")) {
     return role === "prospect" || role === "admin";
   }
@@ -34,6 +34,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  // Skip API, Next internals, and static assets.
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"]
 };

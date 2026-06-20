@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { CheckCircle2, XCircle, Wallet, Upload, Info, Clock, AlertCircle, Eye, X } from "lucide-react";
+import { CheckCircle2, XCircle, Wallet, Upload, Info, Clock, AlertCircle, Eye, X, PenLine } from "lucide-react";
 import { api } from "@/lib/api-client";
 import { formatIdr } from "@/lib/format";
 import { PageHeader, Card, Button, StatusBadge, SkeletonTable, Stat, EmptyState } from "@/components/ui";
@@ -20,8 +20,12 @@ type Billing = {
 export default function AdminFinancePage() {
   const [billings, setBillings] = useState<Billing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [verifying, setVerifying] = useState<string | null>(null);
+  const [verifying, setVerifying]   = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [koreksiId, setKoreksiId]   = useState<string | null>(null);
+  const [koreksiVal, setKoreksiVal] = useState("");
+  const [koreksiReason, setKoreksiReason] = useState("");
+  const [koreksiSaving, setKoreksiSaving] = useState(false);
 
   const load = useCallback(() => {
     api.get<{ billings: Billing[] }>("/finance/setoran").then((r) => {
@@ -31,6 +35,17 @@ export default function AdminFinancePage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  const saveKoreksi = async () => {
+    if (!koreksiId) return;
+    setKoreksiSaving(true);
+    await api.patch(`/finance/setoran/${koreksiId}/koreksi`, { newValue: Number(koreksiVal), reason: koreksiReason, by: "admin" });
+    setKoreksiSaving(false);
+    setKoreksiId(null);
+    setKoreksiVal("");
+    setKoreksiReason("");
+    load();
+  };
 
   const verify = async (id: string, decision: "verify" | "reject") => {
     setVerifying(id);
@@ -201,7 +216,12 @@ export default function AdminFinancePage() {
                             <CheckCircle2 size={12} /> Lunas
                           </span>
                         ) : (
-                          <span className="text-[11px] font-semibold text-slate-300">Menunggu upload</span>
+                          <button
+                            onClick={() => { setKoreksiId(b.id); setKoreksiVal(String(b.totalValue)); setKoreksiReason(""); }}
+                            className="flex items-center gap-1 text-[11px] font-bold text-amber-600 hover:text-amber-700 hover:underline"
+                          >
+                            <PenLine size={11} /> Koreksi Nilai
+                          </button>
                         )}
                       </div>
                     </td>
@@ -212,6 +232,32 @@ export default function AdminFinancePage() {
           </div>
         )}
       </Card>
+
+      {/* Koreksi Tagihan Modal */}
+      {koreksiId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm animate-fade-in p-4" onClick={() => setKoreksiId(null)}>
+          <div className="w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl animate-slide-up" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+              <div>
+                <h3 className="font-display text-base font-black text-slate-900">Koreksi Nilai Tagihan</h3>
+                <p className="text-xs font-medium text-slate-400">{koreksiId} · aksi ini dicatat di audit trail</p>
+              </div>
+              <button onClick={() => setKoreksiId(null)} className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"><X size={18} /></button>
+            </div>
+            <div className="space-y-4 p-5">
+              <label className="block space-y-1.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Nilai Baru (Rp)</span>
+                <input type="number" value={koreksiVal} onChange={(e) => setKoreksiVal(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 font-bold text-slate-900 focus:border-brand-400 focus:bg-white focus:outline-none" />
+              </label>
+              <label className="block space-y-1.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Alasan Koreksi <span className="text-rose-500">*</span></span>
+                <textarea rows={2} value={koreksiReason} onChange={(e) => setKoreksiReason(e.target.value)} placeholder="mis. Salah hitung qty penjualan agen-001 bulan Mei…" className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm font-medium text-slate-800 focus:border-brand-400 focus:bg-white focus:outline-none" />
+              </label>
+              <Button loading={koreksiSaving} onClick={saveKoreksi} className="w-full justify-center"><PenLine size={15} /> Simpan Koreksi</Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Lightbox bukti transfer */}
       {previewUrl && (

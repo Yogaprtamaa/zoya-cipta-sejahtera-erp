@@ -1,6 +1,7 @@
 import {
   LayoutDashboard, Package, ClipboardList, ShoppingCart, Boxes, Wallet, MapPinned, Gift, Undo2,
   MessagesSquare, Users, Warehouse, BarChart3, Scale, Briefcase, Bell, ScrollText, Settings, BadgeCheck,
+  FlaskConical, FileText,
   type LucideIcon
 } from "lucide-react";
 
@@ -43,13 +44,15 @@ export const adminNav: NavSection[] = [
     { href: "/admin/wilayah", label: "Wilayah", icon: MapPinned },
     { href: "/admin/chat", label: "Chat", icon: MessagesSquare },
     { href: "/admin/notifikasi", label: "Notifikasi", icon: Bell },
-    { href: "/admin/users", label: "Users", icon: Users },
+    { href: "/admin/users", label: "Kelola Pengguna", icon: Users },
     { href: "/admin/audit-trail", label: "Audit Trail", icon: ScrollText },
-    { href: "/admin/settings", label: "Settings", icon: Settings }
+    { href: "/admin/settings", label: "Pengaturan", icon: Settings }
   ]}
 ];
 
-export const direkturNav: NavSection[] = [
-  { items: [{ href: "/direktur/dashboard", label: "Monitoring", icon: BarChart3 }] },
-  { items: [{ href: "/direktur/approval", label: "Approval Order", icon: BadgeCheck }] }
+export const maklonPortalNav: NavSection[] = [
+  { items: [{ href: "/maklon-portal", label: "Dashboard Maklon", icon: FlaskConical }] },
+  { items: [{ href: "/maklon-portal/konsultasi", label: "Ajukan Konsultasi", icon: FileText }] },
+  { items: [{ href: "/maklon-portal/status", label: "Status Pipeline", icon: BadgeCheck }] },
+  { items: [{ href: "/maklon-portal/laporan", label: "Monitoring", icon: BarChart3 }] }
 ];

@@ -1,8 +1,10 @@
 "use client";
 
-import { DashboardShell } from "@/components/layout/dashboard-shell";
-import { direkturNav } from "@/components/layout/nav-config";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DirekturLayout({ children }: { children: React.ReactNode }) {
-  return <DashboardShell workspace="Direktur" userName="Direktur Utama" sections={direkturNav}>{children}</DashboardShell>;
+  const router = useRouter();
+  useEffect(() => { router.replace("/admin"); }, [router]);
+  return <>{children}</>;
 }

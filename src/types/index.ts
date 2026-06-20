@@ -3,9 +3,34 @@
  * These are the contract the real backend will follow (see system-architecture doc).
  */
 
-export type Role = "guest" | "prospect" | "agent" | "director" | "admin";
+export type Role = "guest" | "prospect" | "agent" | "klien_maklon" | "admin";
 export type AgentLevel = "agen" | "sub-agen" | "reseller";
 export type AccountStatus = "pending" | "active" | "rejected" | "suspended";
+
+export type Permission =
+  | "kelola_pengguna"
+  | "akses_pengaturan"
+  | "persetujuan_order_besar"
+  | "approve_pendaftaran_agen"
+  | "kelola_produk"
+  | "kelola_inventory"
+  | "verifikasi_setoran"
+  | "koreksi_tagihan"
+  | "kelola_pipeline_maklon"
+  | "kelola_wilayah"
+  | "lihat_laporan_eksekutif";
+
+export type InternalUserRole = "super_admin" | "admin_operasional" | "approver";
+
+export type InternalUser = {
+  id: string;
+  name: string;
+  email: string;
+  internalRole: InternalUserRole;
+  permissions: Permission[];
+  isActive: boolean;
+  createdAt: string;
+};
 
 export type Region = { id: string; kabupaten: string; agentId: string | null; monthlyTarget: number };
 
@@ -32,10 +57,10 @@ export type InventoryItem = {
   locationType: "warehouse" | "agent";
   locationId: string;
   status: InventoryStatus;
-  qty: number; // owner is always Zoya — business rule, not a column
+  qty: number;
 };
 
-export type POStatus = "submitted" | "admin_review" | "director_review" | "approved" | "rejected" | "shipped";
+export type POStatus = "submitted" | "admin_review" | "pending_approval" | "approved" | "rejected" | "shipped";
 export type PurchaseOrder = {
   id: string;
   agentId: string;
@@ -51,7 +76,7 @@ export type BillingStatus = "unbilled" | "uploaded" | "verified" | "paid";
 export type MonthlyBilling = {
   id: string;
   agentId: string;
-  period: string; // "2026-06"
+  period: string;
   totalQty: number;
   totalValue: number;
   status: BillingStatus;
@@ -61,15 +86,20 @@ export type MonthlyBilling = {
 export type ReturnStatus = "pending" | "approved" | "rejected";
 export type Return = { id: string; agentId: string; variantId: string; qty: number; evidenceUrl: string; status: ReturnStatus; reason?: string };
 
-export type MaklonStage = "lead" | "quote" | "formulation" | "production" | "qc" | "done";
+export type MaklonStage = "consultation" | "quote" | "deal_dp" | "formulation" | "production" | "qc" | "done";
+export type ConsultationStatus = "pending" | "approved" | "rejected";
+
 export type MaklonLead = {
   id: string;
   clientName: string;
   productType: string;
   targetVolume: number;
   stage: MaklonStage;
+  consultationStatus: ConsultationStatus;
   contact: string;
   value?: number;
+  clientId?: string;
+  notes?: string;
 };
 
 export type ChatMessage = {
@@ -101,13 +131,13 @@ export type RekeningInfo = {
 };
 
 export type Settings = {
-  director_threshold: number; // Rp
+  approval_threshold: number; // Rp — threshold nilai order besar yang butuh persetujuan
   consignment_limit: number; // Rp per agent
   cutoff_date: number; // day of month
   region_target: number; // botol/month
   min_stock: Record<string, number>; // per product id
   price_defaults: Record<string, number>; // per product id
-  rekening: RekeningInfo[]; // bank accounts for transfers
+  rekening: RekeningInfo[];
 };
 
 /** Standard API response envelope (spec §3.2 / §4). */

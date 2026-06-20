@@ -12,7 +12,7 @@ type Order = { id: string; createdAt: string; items: { variantId: string; qty: n
 
 const STATUS_LABEL: Record<string, string> = {
   admin_review: "Menunggu Admin",
-  director_review: "Eskalasi Direktur",
+  pending_approval: "Menunggu Persetujuan",
   approved: "Disetujui",
   shipped: "Dikirim → Stok Masuk",
   rejected: "Ditolak",

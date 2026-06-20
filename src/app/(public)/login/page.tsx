@@ -2,32 +2,58 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { LogIn, Shield, Users, BarChart3, Package } from "lucide-react";
+import { LogIn, Shield, Users, Package, FlaskConical } from "lucide-react";
 import { setSession, roleHome } from "@/lib/auth-mock";
 import { Card } from "@/components/ui";
 import type { Role } from "@/types";
 
-const demoUsers: { role: Role; icon: React.ElementType; label: string; desc: string; color: string }[] = [
+type DemoEntry = {
+  role: Role;
+  level?: string;
+  icon: React.ElementType;
+  label: string;
+  desc: string;
+  color: string;
+};
+
+const demoUsers: DemoEntry[] = [
   {
     role: "agent",
+    level: "agen",
     icon: Package,
     label: "Masuk sebagai Agen",
-    desc: "Nadia Putri · Kab. Bandung · Akun aktif",
+    desc: "Nadia Putri · Kab. Bandung · Level Agen",
     color: "bg-brand-50 text-brand-600",
+  },
+  {
+    role: "agent",
+    level: "sub-agen",
+    icon: Package,
+    label: "Masuk sebagai Sub-agen",
+    desc: "Rina Dewi · Kab. Sumedang · Level Sub-agen",
+    color: "bg-brand-100 text-brand-700",
+  },
+  {
+    role: "agent",
+    level: "reseller",
+    icon: Package,
+    label: "Masuk sebagai Reseller",
+    desc: "Hendra S. · Kota Bandung · Level Reseller",
+    color: "bg-brand-200 text-brand-800",
   },
   {
     role: "admin",
     icon: Shield,
     label: "Masuk sebagai Super Admin",
-    desc: "Backoffice penuh — kelola agen, produk, order",
+    desc: "Backoffice penuh — kelola agen, produk, order & persetujuan",
     color: "bg-slate-100 text-slate-600",
   },
   {
-    role: "director",
-    icon: BarChart3,
-    label: "Masuk sebagai Direktur",
-    desc: "Approval order besar & laporan eksekutif",
-    color: "bg-indigo-50 text-indigo-600",
+    role: "klien_maklon",
+    icon: FlaskConical,
+    label: "Masuk sebagai Klien Maklon",
+    desc: "CV Natura Herbal · Portal konsultasi & monitoring pipeline",
+    color: "bg-violet-50 text-violet-600",
   },
   {
     role: "prospect",
@@ -40,9 +66,11 @@ const demoUsers: { role: Role; icon: React.ElementType; label: string; desc: str
 
 export default function LoginPage() {
   const router = useRouter();
-  const enter = (role: Role) => {
-    setSession(role, role === "prospect" ? "pending" : "active");
-    router.push(roleHome[role]);
+
+  const enter = (entry: DemoEntry) => {
+    const status = entry.role === "prospect" ? "pending" : "active";
+    setSession(entry.role, status, entry.level ?? "agen");
+    router.push(roleHome[entry.role]);
     router.refresh();
   };
 
@@ -63,8 +91,8 @@ export default function LoginPage() {
       <Card className="space-y-2 p-4">
         {demoUsers.map((u) => (
           <button
-            key={u.role}
-            onClick={() => enter(u.role)}
+            key={`${u.role}-${u.level ?? "default"}`}
+            onClick={() => enter(u)}
             className="flex w-full items-center gap-4 rounded-2xl border border-slate-200/70 p-4 text-left transition-all hover:border-brand-200 hover:bg-brand-50/40 cursor-pointer"
           >
             <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${u.color}`}>

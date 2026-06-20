@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { CheckCircle2, XCircle, Truck, AlertTriangle } from "lucide-react";
+import { CheckCircle2, XCircle, Truck } from "lucide-react";
 import { api } from "@/lib/api-client";
 import { formatIdr } from "@/lib/format";
 import { PageHeader, Card, Button, StatusBadge, SkeletonTable, Badge } from "@/components/ui";
@@ -14,13 +14,13 @@ export default function AdminOrderPage() {
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(() => api.get<{ orders: Order[] }>("/order").then((r) => { if (r.data) setOrders(r.data.orders); setLoading(false); }), []);
-  useEffect(() => { load(); api.get<{ settings: { director_threshold: number } }>("/settings").then((r) => r.data && setThreshold(r.data.settings.director_threshold)); }, [load]);
+  useEffect(() => { load(); api.get<{ settings: { approval_threshold: number } }>("/settings").then((r) => r.data && setThreshold(r.data.settings.approval_threshold)); }, [load]);
 
-  const act = async (id: string, action: "approve" | "reject" | "ship") => { await api.post(`/order/${id}/approve`, { action }); load(); };
+  const act = async (id: string, action: "approve" | "reject" | "ship") => { await api.post(`/order/${id}/approve`, { action, by: "admin" }); load(); };
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Order / PO" subtitle="Validasi & otorisasi permintaan alokasi. Order ≥ threshold otomatis ke Direktur." />
+      <PageHeader title="Order / PO" subtitle={`Validasi & otorisasi permintaan alokasi. Order ≥ ${formatIdr(threshold)} wajib persetujuan.`} />
       <Card className="overflow-hidden">
         {loading ? <div className="p-6"><SkeletonTable rows={3} /></div> : (
           <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-sm">
@@ -31,11 +31,21 @@ export default function AdminOrderPage() {
                 <tr key={o.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4 font-bold text-slate-900">{o.id}</td>
                   <td className="px-4 py-4 font-medium text-slate-600">{o.agentName}</td>
-                  <td className="px-4 py-4 text-right font-bold text-slate-700">{formatIdr(o.totalValue)} {large && <span title="Butuh Direktur"><AlertTriangle size={12} className="ml-1 inline text-amber-500" /></span>}</td>
+                  <td className="px-4 py-4 text-right font-bold text-slate-700">{formatIdr(o.totalValue)}</td>
                   <td className="px-4 py-4"><StatusBadge status={o.status} /></td>
                   <td className="px-6 py-4 text-right">
-                    {o.status === "admin_review" && <div className="flex justify-end gap-2"><Button size="sm" variant="secondary" onClick={() => act(o.id, "reject")}><XCircle size={14} /></Button><Button size="sm" onClick={() => act(o.id, "approve")}><CheckCircle2 size={14} /> {large ? "Teruskan" : "Approve"}</Button></div>}
-                    {o.status === "director_review" && <Badge tone="info">Menunggu Direktur</Badge>}
+                    {o.status === "admin_review" && (
+                      <div className="flex justify-end gap-2">
+                        <Button size="sm" variant="secondary" onClick={() => act(o.id, "reject")}><XCircle size={14} /></Button>
+                        <Button size="sm" onClick={() => act(o.id, "approve")}><CheckCircle2 size={14} /> {large ? "Teruskan" : "Approve"}</Button>
+                      </div>
+                    )}
+                    {o.status === "pending_approval" && (
+                      <div className="flex justify-end gap-2">
+                        <Button size="sm" variant="secondary" onClick={() => act(o.id, "reject")}><XCircle size={14} /> Tolak</Button>
+                        <Button size="sm" onClick={() => act(o.id, "approve")}><CheckCircle2 size={14} /> Setujui</Button>
+                      </div>
+                    )}
                     {o.status === "approved" && <Button size="sm" onClick={() => act(o.id, "ship")}><Truck size={14} /> Kirim</Button>}
                     {(o.status === "shipped" || o.status === "rejected") && <StatusBadge status={o.status} />}
                   </td>

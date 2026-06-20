@@ -6,10 +6,10 @@ import {
 } from "lucide-react";
 
 const stats = [
-  { value: "200+", label: "Mitra Agen Aktif", sub: "Di seluruh Jawa Barat" },
-  { value: "15", label: "Wilayah Kabupaten", sub: "Eksklusif per mitra" },
-  { value: "3", label: "Lini Produk", sub: "Herbal & kosmetik" },
-  { value: "5+", label: "Tahun Pengalaman", sub: "Berdiri sejak 2019" },
+  { value: "10+", label: "Mitra Agen Aktif", sub: "Di seluruh Jawa Barat (data demo)" },
+  { value: "5",   label: "Wilayah Kabupaten", sub: "Eksklusif per mitra (data demo)" },
+  { value: "3",   label: "Lini Produk", sub: "Herbal & kosmetik" },
+  { value: "5+",  label: "Tahun Pengalaman", sub: "Berdiri sejak 2019" },
 ];
 
 const regions = [
@@ -282,10 +282,10 @@ export default function LandingPage() {
             <div className="card-glow relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-500 to-pink-600 p-5 text-white transition-transform duration-300 hover:-translate-y-1 animate-slide-up stagger-2">
               <ShieldCheck size={22} className="opacity-80" />
               <h3 className="mt-3 font-display text-base font-bold">Approval Berlapis</h3>
-              <p className="mt-1.5 text-xs font-medium leading-relaxed text-white/75">Order besar otomatis eskalasi ke Direktur sesuai threshold konfigurasi.</p>
+              <p className="mt-1.5 text-xs font-medium leading-relaxed text-white/75">Order besar otomatis masuk ke antrean persetujuan sesuai threshold konfigurasi.</p>
               <div className="mt-4 rounded-xl bg-white/10 p-3 text-[9px] font-bold text-white/60">
                 <div className="flex justify-between"><span>Admin review</span><CheckCircle2 size={10} className="text-white/40" /></div>
-                <div className="mt-1 flex justify-between"><span>Direktur approval</span><div className="h-2 w-2 rounded-full bg-amber-300 animate-pulse" /></div>
+                <div className="mt-1 flex justify-between"><span>Persetujuan order besar</span><div className="h-2 w-2 rounded-full bg-amber-300 animate-pulse" /></div>
               </div>
             </div>
 
@@ -305,10 +305,10 @@ export default function LandingPage() {
             <div className="card-glow relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-500 to-purple-600 p-5 text-white transition-transform duration-300 hover:-translate-y-1 animate-slide-up stagger-4">
               <TrendingUp size={22} className="opacity-80" />
               <h3 className="mt-3 font-display text-base font-bold">Harga Bertingkat</h3>
-              <p className="mt-1.5 text-xs font-medium leading-relaxed text-white/75">Tier harga otomatis per level agen dengan override manual.</p>
+              <p className="mt-1.5 text-xs font-medium leading-relaxed text-white/75">Tier harga otomatis per level agen dengan override manual per mitra.</p>
               <div className="mt-4 space-y-1 text-[9px] font-bold">
-                {[["Agen", "Rp 85k"], ["Sub-agen", "Rp 90k"], ["Reseller", "Rp 95k"]].map(([l, v]) => (
-                  <div key={l} className="flex justify-between text-white/80"><span>{l}</span><span className="text-white">{v}</span></div>
+                {["Agen Utama", "Sub-agen", "Reseller"].map((l) => (
+                  <div key={l} className="flex justify-between text-white/80"><span>{l}</span><span className="text-white/40">Login untuk lihat harga</span></div>
                 ))}
               </div>
             </div>
@@ -317,10 +317,10 @@ export default function LandingPage() {
             <div className="card-glow relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 p-5 text-white transition-transform duration-300 hover:-translate-y-1 animate-slide-up stagger-5">
               <Award size={22} className="opacity-80" />
               <h3 className="mt-3 font-display text-base font-bold">Reward Penjualan</h3>
-              <p className="mt-1.5 text-xs font-medium leading-relaxed text-white/75">Program insentif berbasis volume setiap bulan untuk agen terbaik.</p>
+              <p className="mt-1.5 text-xs font-medium leading-relaxed text-white/75">Program insentif tahunan berbasis volume akumulasi penjualan untuk agen terbaik.</p>
               <div className="mt-4 rounded-xl bg-white/10 px-3 py-2 text-center">
                 <div className="text-xl font-black">2.000 pcs</div>
-                <div className="text-[9px] font-bold text-white/60">target reward bulanan</div>
+                <div className="text-[9px] font-bold text-white/60">target reward tahunan</div>
               </div>
             </div>
 
@@ -392,7 +392,7 @@ export default function LandingPage() {
             {[
               { icon: Users, value: "Rp 0", label: "Modal Stok di Muka", sub: "Konsinyasi = titip dulu, bayar setelah laku", bg: "bg-brand-600", shadow: "shadow-brand" },
               { icon: Zap, value: "< 24 jam", label: "Waktu Persetujuan", sub: "Verifikasi dokumen cepat oleh tim admin", bg: "bg-emerald-600", shadow: "" },
-              { icon: Award, value: "2.000 pcs", label: "Target Reward Bulanan", sub: "Capai target, dapatkan insentif tambahan", bg: "bg-amber-600", shadow: "" },
+              { icon: Award, value: "2.000 pcs", label: "Target Reward Tahunan", sub: "Capai target, dapatkan insentif tambahan", bg: "bg-amber-600", shadow: "" },
             ].map((item, i) => (
               <div key={item.label} className={`flex gap-4 rounded-3xl border border-slate-200/70 bg-white p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg animate-slide-up stagger-${i + 1}`}>
                 <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${item.bg} ${item.shadow} text-white`}>
@@ -415,7 +415,7 @@ export default function LandingPage() {
           <div className="text-center animate-slide-up">
             <span className="inline-block rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-700">Testimonial Mitra</span>
             <h2 className="mt-4 font-display text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">Apa kata mitra agen kami?</h2>
-            <p className="mx-auto mt-3 max-w-lg text-base font-medium text-slate-500">Bergabunglah dengan 200+ mitra agen yang sudah membuktikan manfaatnya di seluruh Indonesia.</p>
+            <p className="mx-auto mt-3 max-w-lg text-base font-medium text-slate-500">Bergabunglah dengan mitra agen kami yang sudah membuktikan manfaatnya di seluruh Jawa Barat.</p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
             {testimonials.map((t, i) => (
@@ -457,9 +457,9 @@ export default function LandingPage() {
           </div>
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
             {[
-              { name: "Madu Pahit", cat: "Madu Herbal", price: "Rp 85.000+", tag: "Bestseller", tagC: "bg-brand-100 text-brand-700", border: "border-brand-200/50", bg: "bg-brand-50/30" },
-              { name: "Sari Kurma Plus", cat: "Suplemen", price: "Rp 120.000+", tag: "Populer", tagC: "bg-emerald-100 text-emerald-700", border: "border-emerald-200/50", bg: "bg-emerald-50/20" },
-              { name: "Produk Maklon", cat: "Private Label", price: "Custom", tag: "Eksklusif", tagC: "bg-violet-100 text-violet-700", border: "border-violet-200/50", bg: "bg-violet-50/20" },
+              { name: "Madu Pahit", cat: "Madu Herbal", price: "Login untuk harga mitra", tag: "Bestseller", tagC: "bg-brand-100 text-brand-700", border: "border-brand-200/50", bg: "bg-brand-50/30" },
+              { name: "Sari Kurma Plus", cat: "Suplemen", price: "Login untuk harga mitra", tag: "Populer", tagC: "bg-emerald-100 text-emerald-700", border: "border-emerald-200/50", bg: "bg-emerald-50/20" },
+              { name: "Produk Maklon", cat: "Private Label", price: "Custom · Konsultasi dulu", tag: "Eksklusif", tagC: "bg-violet-100 text-violet-700", border: "border-violet-200/50", bg: "bg-violet-50/20" },
             ].map((p, i) => (
               <div key={p.name} className={`flex items-center gap-4 rounded-2xl border ${p.border} ${p.bg} p-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-soft animate-fade-in stagger-${i + 1}`}>
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white shadow-soft text-brand-300">
@@ -553,7 +553,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <p className="mt-6 text-xs font-medium text-white/40">
-                Bergabung dengan 200+ mitra agen aktif di seluruh Jawa Barat dan sekitarnya.
+                Bergabung dengan mitra agen aktif kami di seluruh Jawa Barat dan sekitarnya.
               </p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import type {
   Agent, Region, Product, Variant, PriceTier, PriceOverride, InventoryItem,
-  PurchaseOrder, Sale, MonthlyBilling, Return, MaklonLead, ChatMessage, Notification, AuditLog, Settings
+  PurchaseOrder, Sale, MonthlyBilling, Return, MaklonLead, ChatMessage, Notification, AuditLog, Settings, InternalUser
 } from "@/types";
 
 /**
@@ -26,6 +26,7 @@ export type Db = {
   notifications: Notification[];
   audit: AuditLog[];
   settings: Settings;
+  internalUsers: InternalUser[];
 };
 
 function seed(): Db {
@@ -61,11 +62,10 @@ function seed(): Db {
       { id: "var-maklon-5g", productId: "prod-maklon-sn", name: "5 g", unit: "sachet" }
     ],
     priceTiers: [
-      { variantId: "var-madu-100", level: "agen", price: 85000 }, { variantId: "var-madu-100", level: "sub-agen", price: 90000 }, { variantId: "var-madu-100", level: "reseller", price: 95000 }, { variantId: "var-madu-100", level: "default", price: 110000 },
-      { variantId: "var-madu-250", level: "agen", price: 150000 }, { variantId: "var-madu-250", level: "sub-agen", price: 158000 }, { variantId: "var-madu-250", level: "reseller", price: 165000 }, { variantId: "var-madu-250", level: "default", price: 195000 },
-      { variantId: "var-sari-250", level: "agen", price: 120000 }, { variantId: "var-sari-250", level: "sub-agen", price: 126000 }, { variantId: "var-sari-250", level: "reseller", price: 132000 }, { variantId: "var-sari-250", level: "default", price: 160000 }
+      { variantId: "var-madu-100", level: "agen",     price:  85000 }, { variantId: "var-madu-100", level: "sub-agen", price: 100000 }, { variantId: "var-madu-100", level: "reseller", price: 135000 }, { variantId: "var-madu-100", level: "default", price: 160000 },
+      { variantId: "var-madu-250", level: "agen",     price: 150000 }, { variantId: "var-madu-250", level: "sub-agen", price: 175000 }, { variantId: "var-madu-250", level: "reseller", price: 225000 }, { variantId: "var-madu-250", level: "default", price: 260000 },
+      { variantId: "var-sari-250", level: "agen",     price: 120000 }, { variantId: "var-sari-250", level: "sub-agen", price: 140000 }, { variantId: "var-sari-250", level: "reseller", price: 180000 }, { variantId: "var-sari-250", level: "default", price: 210000 }
     ],
-    // Override: agent-001 gets a special price on Sari Kurma.
     priceOverrides: [{ variantId: "var-sari-250", agentId: "agent-001", price: 112000 }],
     inventory: [
       { id: "inv-w1", variantId: "var-madu-100", locationType: "warehouse", locationId: "wh-pusat", status: "available", qty: 1200 },
@@ -77,7 +77,8 @@ function seed(): Db {
     ],
     purchaseOrders: [
       { id: "PO-2026-0039", agentId: "agent-001", items: [{ variantId: "var-madu-100", qty: 50 }, { variantId: "var-sari-250", qty: 30 }], totalValue: 9610000, status: "shipped", createdAt: "2026-06-15" },
-      { id: "PO-2026-0031", agentId: "agent-003", items: [{ variantId: "var-madu-100", qty: 100 }], totalValue: 9500000, status: "approved", createdAt: "2026-06-01" }
+      { id: "PO-2026-0031", agentId: "agent-003", items: [{ variantId: "var-madu-100", qty: 100 }], totalValue: 9500000, status: "approved", createdAt: "2026-06-01" },
+      { id: "PO-2026-0042", agentId: "agent-002", items: [{ variantId: "var-madu-100", qty: 200 }, { variantId: "var-sari-250", qty: 80 }], totalValue: 26800000, status: "pending_approval", createdAt: "2026-06-19" }
     ],
     sales: [
       { id: "SAL-0118", agentId: "agent-001", variantId: "var-madu-100", qty: 30, date: "2026-06-18", reportedAt: "2026-06-18T10:24:00" },
@@ -95,9 +96,10 @@ function seed(): Db {
       { id: "RTN-0007", agentId: "agent-001", variantId: "var-sari-250", qty: 2, evidenceUrl: "mock://retur-foto", status: "pending", reason: "Kemasan rusak saat distribusi" }
     ],
     maklonLeads: [
-      { id: "MKL-0012", clientName: "PT Sehat Natura", productType: "Minuman Herbal Sachet", targetVolume: 10000, stage: "quote", contact: "Bu Rina · 0812-1000-2000", value: 185000000 },
-      { id: "MKL-0010", clientName: "Klinik Sari Ayu", productType: "Serum Wajah Herbal", targetVolume: 3000, stage: "formulation", contact: "dr. Maya · 0813-3000-4000", value: 144000000 },
-      { id: "MKL-0009", clientName: "Toko Barokah", productType: "Kapsul Habbatussauda", targetVolume: 8000, stage: "production", contact: "Pak Hasan · 0856-5000-6000", value: 120000000 }
+      { id: "MKL-0012", clientName: "PT Sehat Natura", productType: "Minuman Herbal Sachet", targetVolume: 10000, stage: "quote", consultationStatus: "approved", contact: "Bu Rina · 0812-1000-2000", value: 185000000, clientId: "mkl-client-001" },
+      { id: "MKL-0010", clientName: "Klinik Sari Ayu", productType: "Serum Wajah Herbal", targetVolume: 3000, stage: "formulation", consultationStatus: "approved", contact: "dr. Maya · 0813-3000-4000", value: 144000000 },
+      { id: "MKL-0009", clientName: "Toko Barokah", productType: "Kapsul Habbatussauda", targetVolume: 8000, stage: "production", consultationStatus: "approved", contact: "Pak Hasan · 0856-5000-6000", value: 120000000 },
+      { id: "MKL-0013", clientName: "CV Natura Herbal", productType: "Minuman Kesehatan / Herbal", targetVolume: 5000, stage: "consultation", consultationStatus: "pending", contact: "Ibu Sari · 0812-9999-8888", clientId: "mkl-client-002" }
     ],
     chat: [
       { id: "msg-1", channelId: "chan-nadia", senderType: "customer", body: "Stok Madu Pahit masih ada?", attachmentUrl: null, createdAt: "2026-06-19T08:30:00" },
@@ -109,10 +111,10 @@ function seed(): Db {
     ],
     audit: [
       { id: "aud-1", actorId: "admin", action: "verify_payment", entity: "monthly_billing", entityId: "BIL-2026-05-a001", before: { status: "uploaded" }, after: { status: "paid" }, timestamp: "2026-06-05T09:12:00" },
-      { id: "aud-2", actorId: "director", action: "approve_po", entity: "purchase_order", entityId: "PO-2026-0039", before: { status: "director_review" }, after: { status: "approved" }, timestamp: "2026-06-15T11:05:00" }
+      { id: "aud-2", actorId: "admin", action: "approve_po", entity: "purchase_order", entityId: "PO-2026-0039", before: { status: "pending_approval" }, after: { status: "approved" }, timestamp: "2026-06-15T11:05:00" }
     ],
     settings: {
-      director_threshold: 12750000,
+      approval_threshold: 12750000,
       consignment_limit: 20000000,
       cutoff_date: 1,
       region_target: 100,
@@ -123,7 +125,44 @@ function seed(): Db {
         { bank: "Mandiri", accountNumber: "1100009876543", accountName: "PT Zoya Cipta Sejahtera", notes: "Alternatif" },
         { bank: "BRI", accountNumber: "0987654321001", accountName: "PT Zoya Cipta Sejahtera", notes: "Alternatif" },
       ]
-    }
+    },
+    internalUsers: [
+      {
+        id: "usr-superadmin",
+        name: "Katon Wijaya",
+        email: "katon@zoyacipta.id",
+        internalRole: "super_admin",
+        permissions: [
+          "kelola_pengguna", "akses_pengaturan", "persetujuan_order_besar",
+          "approve_pendaftaran_agen", "kelola_produk", "kelola_inventory",
+          "verifikasi_setoran", "koreksi_tagihan", "kelola_pipeline_maklon",
+          "kelola_wilayah", "lihat_laporan_eksekutif"
+        ],
+        isActive: true,
+        createdAt: "2024-01-01"
+      },
+      {
+        id: "usr-ops",
+        name: "Dewi Anggraini",
+        email: "dewi@zoyacipta.id",
+        internalRole: "admin_operasional",
+        permissions: [
+          "approve_pendaftaran_agen", "kelola_produk", "kelola_inventory",
+          "verifikasi_setoran", "kelola_pipeline_maklon", "kelola_wilayah"
+        ],
+        isActive: true,
+        createdAt: "2024-03-15"
+      },
+      {
+        id: "usr-approver",
+        name: "Bpk. Hartono",
+        email: "hartono@zoyacipta.id",
+        internalRole: "approver",
+        permissions: ["persetujuan_order_besar", "lihat_laporan_eksekutif"],
+        isActive: true,
+        createdAt: "2024-03-15"
+      }
+    ]
   };
 }
 

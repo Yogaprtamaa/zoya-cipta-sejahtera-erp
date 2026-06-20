@@ -22,7 +22,7 @@ export function Badge({ tone = "neutral", children }: { tone?: Tone; children: R
 
 const statusToneMap: Record<string, Tone> = {
   draft: "neutral", not_started: "neutral", none: "neutral", unbilled: "neutral", available: "neutral", lead: "neutral",
-  submitted: "info", admin_review: "info", director_review: "info", under_review: "info", uploaded: "info", quote: "info",
+  submitted: "info", admin_review: "info", pending_approval: "warning", under_review: "info", uploaded: "info", quote: "info", consultation: "info",
   approved: "success", received: "success", completed: "success", verified: "success", paid: "success", active: "success", done: "success", eligible_extra: "success", shipped: "success",
   picking: "warning", packed: "warning", needs_revision: "warning", pending: "warning", under_evaluation: "warning", formulation: "warning", production: "warning", qc: "warning",
   rejected: "danger", reversed: "danger", overdue: "danger", suspended: "danger"

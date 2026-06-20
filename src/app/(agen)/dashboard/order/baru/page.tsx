@@ -34,8 +34,8 @@ export default function OrderBaruPage() {
         setVariantId(flat[0]?.id ?? "");
       }
     });
-    api.get<{ settings: { director_threshold: number } }>("/settings").then(
-      (r) => r.data && setThreshold(r.data.settings.director_threshold)
+    api.get<{ settings: { approval_threshold: number } }>("/settings").then(
+      (r) => r.data && setThreshold(r.data.settings.approval_threshold)
     );
   }, []);
 
@@ -128,7 +128,7 @@ export default function OrderBaruPage() {
           <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-amber-800">
             <AlertTriangle size={18} className="mt-0.5 shrink-0" />
             <div>
-              Nilai stok ≥ threshold ({formatIdr(threshold)}). Permintaan ini akan otomatis dieskalasi ke Direktur untuk persetujuan tambahan.
+              Nilai stok ≥ threshold ({formatIdr(threshold)}). Permintaan ini memerlukan persetujuan tambahan dari Super Admin setelah review awal.
             </div>
           </div>
         )}
