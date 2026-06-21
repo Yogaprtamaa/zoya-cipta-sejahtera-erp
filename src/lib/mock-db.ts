@@ -117,6 +117,7 @@ function seed(): Db {
       approval_threshold: 12750000,
       consignment_limit: 20000000,
       cutoff_date: 1,
+      late_tolerance: 3,
       region_target: 100,
       min_stock: { "prod-madu": 200, "prod-sari": 100, "prod-maklon-sn": 0 },
       price_defaults: { "prod-madu": 110000, "prod-sari": 160000, "prod-maklon-sn": 0 },

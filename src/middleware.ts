@@ -15,7 +15,7 @@ function allowed(pathname: string, role: string): boolean {
   if (pathname.startsWith("/admin")) return role === "admin";
   if (pathname.startsWith("/dashboard")) return role === "agent" || role === "admin";
   if (pathname.startsWith("/maklon-portal")) return role === "klien_maklon" || role === "admin";
-  if (pathname.startsWith("/konversi") || pathname.startsWith("/ajukan-agen") || pathname.startsWith("/request-maklon")) {
+  if (pathname.startsWith("/konversi") || pathname.startsWith("/ajukan-agen")) {
     return role === "prospect" || role === "admin";
   }
   return true; // public areas

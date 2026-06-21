@@ -134,6 +134,7 @@ export type Settings = {
   approval_threshold: number; // Rp — threshold nilai order besar yang butuh persetujuan
   consignment_limit: number; // Rp per agent
   cutoff_date: number; // day of month
+  late_tolerance: number; // days — toleransi keterlambatan setoran setelah cutoff
   region_target: number; // botol/month
   min_stock: Record<string, number>; // per product id
   price_defaults: Record<string, number>; // per product id

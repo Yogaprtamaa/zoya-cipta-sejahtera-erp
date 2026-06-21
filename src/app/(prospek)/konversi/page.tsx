@@ -130,8 +130,8 @@ export default function KonversiPage() {
                 <Link href="/ajukan-agen" className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-brand-700 transition-all hover:scale-[1.02] hover:shadow-md">
                   Ajukan Jadi Agen <ArrowRight size={16} />
                 </Link>
-                <Link href="/request-maklon" className="inline-flex items-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-bold text-white ring-1 ring-white/20 transition-all hover:bg-white/20">
-                  <FlaskConical size={16} /> Request Maklon
+                <Link href="/maklon" className="inline-flex items-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-bold text-white ring-1 ring-white/20 transition-all hover:bg-white/20">
+                  <FlaskConical size={16} /> Layanan Maklon
                 </Link>
               </div>
             </div>
@@ -183,7 +183,7 @@ export default function KonversiPage() {
           </div>
         </Link>
 
-        <Link href="/request-maklon" className="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-gradient-to-br from-slate-50 to-violet-50/30 p-6 transition-all hover:-translate-y-1 hover:border-violet-200 hover:shadow-soft-lg">
+        <Link href="/maklon" className="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-gradient-to-br from-slate-50 to-violet-50/30 p-6 transition-all hover:-translate-y-1 hover:border-violet-200 hover:shadow-soft-lg">
           <div className="flex items-start justify-between">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-white transition-transform group-hover:scale-110">
               <FlaskConical size={22} />
@@ -424,8 +424,8 @@ export default function KonversiPage() {
               <Link href="/ajukan-agen" className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-brand-700 transition-all hover:scale-[1.02] hover:shadow-lg">
                 Ajukan Kemitraan Sekarang <ArrowRight size={16} />
               </Link>
-              <Link href="/request-maklon" className="inline-flex items-center gap-2 rounded-full border-2 border-white/25 px-7 py-3.5 text-sm font-bold text-white transition-all hover:bg-white/10">
-                <FlaskConical size={16} /> Request Maklon
+              <Link href="/maklon" className="inline-flex items-center gap-2 rounded-full border-2 border-white/25 px-7 py-3.5 text-sm font-bold text-white transition-all hover:bg-white/10">
+                <FlaskConical size={16} /> Layanan Maklon
               </Link>
             </div>
           </div>

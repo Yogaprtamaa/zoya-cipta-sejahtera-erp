@@ -145,7 +145,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 {[
                   ["Daftar Sebagai Agen", "/daftar"],
                   ["Ajukan Wilayah", "/konversi"],
-                  ["Request Maklon", "/request-maklon"],
+                  ["Layanan Maklon", "/maklon"],
                   ["Masuk Portal", "/login"],
                 ].map(([label, href]) => (
                   <li key={href}>
