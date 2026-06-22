@@ -1,6 +1,6 @@
 import type {
   Agent, Region, Product, Variant, PriceTier, PriceOverride, InventoryItem,
-  PurchaseOrder, Sale, MonthlyBilling, Return, MaklonLead, ChatMessage, Notification, AuditLog, Settings, InternalUser
+  PurchaseOrder, Sale, MonthlyBilling, Return, MaklonLead, ChatMessage, Notification, AuditLog, Settings, InternalUser, ResellerReport
 } from "@/types";
 
 /**
@@ -19,6 +19,7 @@ export type Db = {
   inventory: InventoryItem[];
   purchaseOrders: PurchaseOrder[];
   sales: Sale[];
+  resellerReports: ResellerReport[];
   billings: MonthlyBilling[];
   returns: Return[];
   maklonLeads: MaklonLead[];
@@ -33,14 +34,14 @@ function seed(): Db {
   return {
     agents: [
       { id: "agent-001", name: "Nadia Putri", level: "agen", parentId: null, regionId: "reg-bandung", status: "active", email: "nadia@zoyamitra.id", phone: "+62 812-3456-7890" },
-      { id: "agent-002", name: "Toko Sehat Jaya", level: "sub-agen", parentId: "agent-001", regionId: "reg-garut", status: "active", phone: "+62 813-2222-1111" },
-      { id: "agent-003", name: "Berkah Herbal", level: "reseller", parentId: null, regionId: "reg-tasik", status: "active", phone: "+62 856-9090-3030" },
+      { id: "agent-002", name: "Toko Sehat Jaya", level: "reseller", parentId: "agent-001", regionId: "reg-garut", status: "active", phone: "+62 813-2222-1111" },
+      { id: "agent-003", name: "Berkah Herbal", level: "reseller", parentId: "agent-004", regionId: "reg-tasik", status: "active", phone: "+62 856-9090-3030" },
       { id: "agent-004", name: "Apotek Lestari", level: "agen", parentId: null, regionId: "reg-cimahi", status: "active" },
       { id: "agent-005", name: "Raka Farma", level: "reseller", parentId: "agent-001", regionId: null, status: "active" },
-      { id: "agent-006", name: "Sari Wangi Store", level: "sub-agen", parentId: "agent-004", regionId: null, status: "active" },
-      { id: "agent-007", name: "Mitra Hijau", level: "reseller", parentId: "agent-003", regionId: null, status: "active" },
+      { id: "agent-006", name: "Sari Wangi Store", level: "reseller", parentId: "agent-004", regionId: null, status: "active" },
+      { id: "agent-007", name: "Mitra Hijau", level: "reseller", parentId: "agent-004", regionId: null, status: "active" },
       { id: "agent-008", name: "Apotek Mitra", level: "agen", parentId: null, regionId: null, status: "active" },
-      { id: "agent-009", name: "Toko Barokah", level: "reseller", parentId: "agent-002", regionId: null, status: "active" },
+      { id: "agent-009", name: "Toko Barokah", level: "reseller", parentId: "agent-001", regionId: null, status: "active" },
       { id: "agent-010", name: "Herbal Sumedang", level: "agen", parentId: null, regionId: "reg-sumedang", status: "pending" }
     ],
     regions: [
@@ -62,9 +63,9 @@ function seed(): Db {
       { id: "var-maklon-5g", productId: "prod-maklon-sn", name: "5 g", unit: "sachet" }
     ],
     priceTiers: [
-      { variantId: "var-madu-100", level: "agen",     price:  85000 }, { variantId: "var-madu-100", level: "sub-agen", price: 100000 }, { variantId: "var-madu-100", level: "reseller", price: 135000 }, { variantId: "var-madu-100", level: "default", price: 160000 },
-      { variantId: "var-madu-250", level: "agen",     price: 150000 }, { variantId: "var-madu-250", level: "sub-agen", price: 175000 }, { variantId: "var-madu-250", level: "reseller", price: 225000 }, { variantId: "var-madu-250", level: "default", price: 260000 },
-      { variantId: "var-sari-250", level: "agen",     price: 120000 }, { variantId: "var-sari-250", level: "sub-agen", price: 140000 }, { variantId: "var-sari-250", level: "reseller", price: 180000 }, { variantId: "var-sari-250", level: "default", price: 210000 }
+      { variantId: "var-madu-100", level: "agen",     price:  85000 }, { variantId: "var-madu-100", level: "reseller", price: 135000 }, { variantId: "var-madu-100", level: "default", price: 160000 },
+      { variantId: "var-madu-250", level: "agen",     price: 150000 }, { variantId: "var-madu-250", level: "reseller", price: 225000 }, { variantId: "var-madu-250", level: "default", price: 260000 },
+      { variantId: "var-sari-250", level: "agen",     price: 120000 }, { variantId: "var-sari-250", level: "reseller", price: 180000 }, { variantId: "var-sari-250", level: "default", price: 210000 }
     ],
     priceOverrides: [{ variantId: "var-sari-250", agentId: "agent-001", price: 112000 }],
     inventory: [
@@ -73,7 +74,16 @@ function seed(): Db {
       { id: "inv-w3", variantId: "var-sari-250", locationType: "warehouse", locationId: "wh-pusat", status: "available", qty: 90 },
       { id: "inv-a1", variantId: "var-madu-100", locationType: "agent", locationId: "agent-001", status: "consigned", qty: 70 },
       { id: "inv-a2", variantId: "var-sari-250", locationType: "agent", locationId: "agent-001", status: "consigned", qty: 34 },
-      { id: "inv-a3", variantId: "var-madu-100", locationType: "agent", locationId: "agent-003", status: "consigned", qty: 25 }
+      { id: "inv-a3", variantId: "var-madu-100", locationType: "agent", locationId: "agent-003", status: "consigned", qty: 25 },
+      // Stok konsinyasi reseller binaan Kab. Bandung (agen-001)
+      { id: "inv-r1", variantId: "var-madu-100", locationType: "agent", locationId: "agent-005", status: "consigned", qty: 18 },
+      { id: "inv-r2", variantId: "var-sari-250", locationType: "agent", locationId: "agent-005", status: "consigned", qty: 12 },
+      { id: "inv-r3", variantId: "var-madu-100", locationType: "agent", locationId: "agent-002", status: "consigned", qty: 30 },
+      { id: "inv-r4", variantId: "var-madu-250", locationType: "agent", locationId: "agent-002", status: "consigned", qty: 8 },
+      { id: "inv-r5", variantId: "var-madu-100", locationType: "agent", locationId: "agent-009", status: "consigned", qty: 22 },
+      // Stok konsinyasi reseller binaan Kota Cimahi (agen-004)
+      { id: "inv-r6", variantId: "var-madu-100", locationType: "agent", locationId: "agent-007", status: "consigned", qty: 40 },
+      { id: "inv-r7", variantId: "var-sari-250", locationType: "agent", locationId: "agent-006", status: "consigned", qty: 15 }
     ],
     purchaseOrders: [
       { id: "PO-2026-0039", agentId: "agent-001", items: [{ variantId: "var-madu-100", qty: 50 }, { variantId: "var-sari-250", qty: 30 }], totalValue: 9610000, status: "shipped", createdAt: "2026-06-15" },
@@ -86,6 +96,16 @@ function seed(): Db {
       { id: "SAL-0095", agentId: "agent-003", variantId: "var-madu-100", qty: 14, date: "2026-06-08", reportedAt: "2026-06-08T09:00:00" },
       { id: "SAL-0080", agentId: "agent-001", variantId: "var-madu-100", qty: 42, date: "2026-05-20", reportedAt: "2026-05-20T11:00:00" },
       { id: "SAL-0078", agentId: "agent-002", variantId: "var-sari-250", qty: 18, date: "2026-05-14", reportedAt: "2026-05-14T16:00:00" }
+    ],
+    resellerReports: [
+      // Raka Farma (reseller) → Nadia Putri (agen pembina)
+      { id: "RPT-0007", resellerId: "agent-005", agentId: "agent-001", variantId: "var-madu-100", qty: 24, value: 3240000, date: "2026-06-17", period: "2026-06", notes: "Penjualan minggu ke-3, bazar herbal.", proofUrl: null, createdAt: "2026-06-17T15:20:00" },
+      { id: "RPT-0006", resellerId: "agent-005", agentId: "agent-001", variantId: "var-sari-250", qty: 8, value: 1440000, date: "2026-06-10", period: "2026-06", notes: "Repeat order pelanggan tetap.", proofUrl: null, createdAt: "2026-06-10T11:05:00" },
+      { id: "RPT-0004", resellerId: "agent-005", agentId: "agent-001", variantId: "var-madu-100", qty: 15, value: 2025000, date: "2026-05-28", period: "2026-05", proofUrl: null, createdAt: "2026-05-28T09:40:00" },
+      // Toko Sehat Jaya (reseller) → Nadia Putri (agen pembina)
+      { id: "RPT-0005", resellerId: "agent-002", agentId: "agent-001", variantId: "var-madu-250", qty: 6, value: 1350000, date: "2026-06-12", period: "2026-06", notes: "Pesanan toko grosir.", proofUrl: null, createdAt: "2026-06-12T13:15:00" },
+      // Mitra Hijau (reseller) → Apotek Lestari (agen pembina)
+      { id: "RPT-0003", resellerId: "agent-007", agentId: "agent-004", variantId: "var-madu-100", qty: 30, value: 4050000, date: "2026-06-09", period: "2026-06", notes: "Distribusi ke 3 apotek mitra.", proofUrl: null, createdAt: "2026-06-09T16:50:00" }
     ],
     billings: [
       { id: "BIL-2026-06-a001", agentId: "agent-001", period: "2026-06", totalQty: 42, totalValue: 3894000, status: "uploaded", proofUrl: null },

@@ -4,7 +4,7 @@
  */
 
 export type Role = "guest" | "prospect" | "agent" | "klien_maklon" | "admin";
-export type AgentLevel = "agen" | "sub-agen" | "reseller";
+export type AgentLevel = "agen" | "reseller";
 export type AccountStatus = "pending" | "active" | "rejected" | "suspended";
 
 export type Permission =
@@ -71,6 +71,21 @@ export type PurchaseOrder = {
 };
 
 export type Sale = { id: string; agentId: string; variantId: string; qty: number; date: string; reportedAt: string; proofUrl?: string | null };
+
+/** Laporan penjualan yang disubmit reseller ke agen pembinanya (read-only monitoring). */
+export type ResellerReport = {
+  id: string;
+  resellerId: string;   // agen ber-level reseller
+  agentId: string;      // agen pembina (parent) penerima laporan
+  variantId: string;
+  qty: number;
+  value: number;        // dihitung saat submit dari tier reseller
+  date: string;         // YYYY-MM-DD
+  period: string;       // YYYY-MM
+  notes?: string;
+  proofUrl?: string | null;
+  createdAt: string;
+};
 
 export type BillingStatus = "unbilled" | "uploaded" | "verified" | "paid";
 export type MonthlyBilling = {

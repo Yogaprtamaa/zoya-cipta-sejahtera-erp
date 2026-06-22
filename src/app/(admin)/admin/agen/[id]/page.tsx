@@ -11,7 +11,7 @@ import { PageHeader, Card, Button, StatusBadge, SkeletonTable, Badge } from "@/c
 type Agent = { id: string; name: string; level: string; regionId: string | null; region: string | null; status: string; outstanding: number; email?: string; phone?: string };
 type Region = { id: string; kabupaten: string };
 
-const LEVELS = ["agen", "sub-agen", "reseller"];
+const LEVELS = ["agen", "reseller"];
 const STATUSES = ["active", "pending", "suspended", "rejected"];
 
 export default function AdminAgenDetail() {

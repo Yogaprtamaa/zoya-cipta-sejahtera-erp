@@ -9,7 +9,7 @@ import { PageHeader, Card, Button, StatusBadge, SkeletonTable, Drawer } from "@/
 
 type Agent = { id: string; name: string; level: string; region: string | null; status: string; outstanding: number };
 
-const LEVELS = ["agen", "sub-agen", "reseller"];
+const LEVELS = ["agen", "reseller"];
 
 export default function AdminAgenPage() {
   const [agents, setAgents] = useState<Agent[]>([]);

@@ -34,7 +34,7 @@ export function getClientRole(): Role {
   return (m?.[1] as Role) ?? DEFAULT_ROLE;
 }
 
-/** Client-side: read current agent level from cookie (agen | sub-agen | reseller). */
+/** Client-side: read current agent level from cookie (agen | reseller). */
 export function getClientLevel(): string {
   if (typeof document === "undefined") return "agen";
   const m = document.cookie.match(new RegExp(`${LEVEL_COOKIE}=([^;]+)`));

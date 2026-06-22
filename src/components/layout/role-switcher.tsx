@@ -12,7 +12,6 @@ const entries: Entry[] = [
   { role: "guest",        label: "Guest" },
   { role: "prospect",     label: "Prospek" },
   { role: "agent",        level: "agen",      label: "Agen" },
-  { role: "agent",        level: "sub-agen",  label: "Sub-agen" },
   { role: "agent",        level: "reseller",  label: "Reseller" },
   { role: "klien_maklon", label: "Klien Maklon" },
   { role: "admin",        label: "Super Admin" },
@@ -20,7 +19,6 @@ const entries: Entry[] = [
 
 function activeLabel(role: Role, level: string): string {
   if (role === "agent") {
-    if (level === "sub-agen")  return "Sub-agen";
     if (level === "reseller")  return "Reseller";
     return "Agen";
   }

@@ -38,19 +38,7 @@ const incomeExamples = [
     border: "border-emerald-200/50",
     badge: "bg-emerald-100 text-emerald-700",
     icon: "⬆️",
-    desc: "Mulai dari pengecer lokal. Modal rendah, risiko minimal.",
-  },
-  {
-    level: "Sub-agen",
-    monthlyVol: "1.500 pcs",
-    margin: "Rp 12.000/pcs",
-    income: "Rp 18.000.000+",
-    color: "from-brand-50 to-indigo-50/60",
-    border: "border-brand-200/50",
-    badge: "bg-brand-100 text-brand-700",
-    icon: "🚀",
-    desc: "Kelola beberapa reseller di bawah Anda. Komisi berlapis.",
-    highlight: true,
+    desc: "Pengecer lokal di bawah binaan agen. Modal rendah, risiko minimal.",
   },
   {
     level: "Agen Utama",
@@ -61,7 +49,8 @@ const incomeExamples = [
     border: "border-violet-200/50",
     badge: "bg-violet-100 text-violet-700",
     icon: "👑",
-    desc: "Puncak jaringan distribusi. Reward eksklusif tiap kuartal.",
+    desc: "Wilayah eksklusif & puncak jaringan distribusi. Membina reseller, reward eksklusif tiap kuartal.",
+    highlight: true,
   },
 ];
 
@@ -75,7 +64,7 @@ const agenLifecycle = [
 const agentTestimonials = [
   {
     name: "Rini Wahyuningsih",
-    region: "Sub-agen · Kab. Cianjur",
+    region: "Reseller · Kab. Cianjur",
     quote: "Mulai dari Rp 0 modal stok — sekarang udah bisa capai 1.500 pcs per bulan. Dashboard-nya membantu banget buat pantau penjualan harian.",
     income: "Rp 18 jt/bln",
     color: "from-brand-400 to-indigo-500",
@@ -217,7 +206,7 @@ export default function KonversiPage() {
             <p className="mt-1.5 text-sm font-medium text-slate-500">Ilustrasi pendapatan bulanan berdasarkan level dan volume penjualan rata-rata mitra aktif kami.</p>
           </div>
         </div>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2">
           {incomeExamples.map((ex, i) => (
             <div
               key={ex.level}

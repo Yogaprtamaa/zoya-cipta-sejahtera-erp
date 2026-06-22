@@ -15,7 +15,8 @@ export const agenNav: NavSection[] = [
     { href: "/dashboard/order", label: "Order Stok", icon: ClipboardList },
     { href: "/dashboard/penjualan", label: "Penjualan", icon: ShoppingCart },
     { href: "/dashboard/inventory", label: "Stok Saya", icon: Boxes },
-    { href: "/dashboard/retur", label: "Retur", icon: Undo2 }
+    { href: "/dashboard/retur", label: "Retur", icon: Undo2 },
+    { href: "/dashboard/laporan-reseller", label: "Laporan Reseller", icon: FileText }
   ]},
   { label: "Keuangan & Wilayah", items: [
     { href: "/dashboard/finance", label: "Setoran", icon: Wallet },
@@ -30,10 +31,12 @@ export const adminNav: NavSection[] = [
   { label: "Mitra & Katalog", items: [
     { href: "/admin/agen", label: "Agen & Approval", icon: Users },
     { href: "/admin/produk", label: "Produk & Harga", icon: Package },
+    { href: "/admin/laporan-reseller", label: "Laporan Reseller", icon: FileText },
     { href: "/admin/maklon", label: "Maklon", icon: Briefcase }
   ]},
   { label: "Rantai Pasok", items: [
     { href: "/admin/inventory", label: "Inventory", icon: Warehouse },
+    { href: "/admin/stok-reseller", label: "Stok Reseller", icon: Boxes },
     { href: "/admin/order", label: "Order / PO", icon: ClipboardList },
     { href: "/admin/penjualan", label: "Penjualan", icon: ShoppingCart },
     { href: "/admin/retur", label: "Retur", icon: Undo2 },

@@ -22,10 +22,9 @@ type Tier = { variantId: string; level: string; price: number };
 type Variant = { id: string; name: string; unit: string; tiers?: Tier[] };
 type Product = { id: string; name: string; isPrivate: boolean; variants: Variant[] };
 
-const LEVELS = ["agen", "sub-agen", "reseller", "default"] as const;
+const LEVELS = ["agen", "reseller", "default"] as const;
 const LEVEL_LABEL: Record<string, string> = {
   agen: "Agen",
-  "sub-agen": "Sub-agen",
   reseller: "Reseller",
   default: "Publik",
 };

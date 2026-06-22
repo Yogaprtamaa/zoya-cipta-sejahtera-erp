@@ -10,8 +10,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const variant = { id: uid("var"), productId: id, name: input.name, unit: input.unit ?? "pcs" };
   db.variants.push(variant);
   if (input.price) {
-    const levels: (AgentLevel | "default")[] = ["agen", "sub-agen", "reseller", "default"];
-    const multipliers: Record<string, number> = { agen: 1, "sub-agen": 1.06, reseller: 1.12, default: 1.3 };
+    const levels: (AgentLevel | "default")[] = ["agen", "reseller", "default"];
+    const multipliers: Record<string, number> = { agen: 1, reseller: 1.12, default: 1.3 };
     levels.forEach((l) => db.priceTiers.push({ variantId: variant.id, level: l, price: Math.round(input.price! * multipliers[l]) }));
   }
   logAudit("admin", "create_variant", "variant", variant.id, null, variant);

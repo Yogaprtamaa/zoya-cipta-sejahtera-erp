@@ -124,7 +124,7 @@ export default function AdminDashboard() {
           {loading ? (
             <SkeletonChart />
           ) : byAgent.length ? (
-            <HBarChart data={byAgent} />
+            <HBarChart data={byAgent} valueFormatter={formatIdr} />
           ) : (
             <div className="py-12 text-center text-sm text-slate-300">Belum ada data penjualan</div>
           )}

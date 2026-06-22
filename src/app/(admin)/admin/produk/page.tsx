@@ -194,7 +194,7 @@ export default function AdminProdukPage() {
           <label className="block space-y-1.5">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Harga Dasar (agen)</span>
             <input type="number" value={newVar.price} onChange={(e) => setNewVar((f) => ({ ...f, price: e.target.value }))} placeholder="85000" className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-800 focus:border-brand-400 focus:outline-none" />
-            <p className="text-[11px] text-slate-400">Otomatis dikalkulasi ke tier sub-agen, reseller, & default.</p>
+            <p className="text-[11px] text-slate-400">Otomatis dikalkulasi ke tier reseller & default.</p>
           </label>
           <div className="pt-4 border-t border-slate-100">
             <Button className="w-full" loading={addingVar} onClick={addVariant} disabled={!newVar.name}>Tambah Varian</Button>

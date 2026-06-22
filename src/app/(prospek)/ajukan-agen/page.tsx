@@ -15,9 +15,8 @@ const steps = [
 ];
 
 const levels = [
-  { v: "agen", label: "Agen Utama", d: "Margin tertinggi, kelola sub-agen", color: "border-brand-500 bg-brand-50", badge: "bg-brand-100 text-brand-700" },
-  { v: "sub-agen", label: "Sub-agen", d: "Di bawah agen utama, area lebih kecil", color: "border-sky-400 bg-sky-50", badge: "bg-sky-100 text-sky-700" },
-  { v: "reseller", label: "Reseller", d: "Eceran, minimum volume lebih rendah", color: "border-emerald-400 bg-emerald-50", badge: "bg-emerald-100 text-emerald-700" },
+  { v: "agen", label: "Agen Utama", d: "Wilayah eksklusif, margin tertinggi, membina reseller", color: "border-brand-500 bg-brand-50", badge: "bg-brand-100 text-brand-700" },
+  { v: "reseller", label: "Reseller", d: "Di bawah agen, eceran dengan minimum volume lebih rendah", color: "border-emerald-400 bg-emerald-50", badge: "bg-emerald-100 text-emerald-700" },
 ];
 
 export default function AjukanAgenPage() {

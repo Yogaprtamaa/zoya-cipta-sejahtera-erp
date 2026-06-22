@@ -75,7 +75,7 @@ export default function AdminPenjualanPage() {
             <TrendingUp size={18} className="text-brand-600" />
             <h3 className="font-display text-lg font-black text-slate-900">Ranking Omzet Agen</h3>
           </div>
-          <HBarChart data={ranking} />
+          <HBarChart data={ranking} valueFormatter={formatIdr} />
         </Card>
       )}
 

@@ -27,18 +27,10 @@ const demoUsers: DemoEntry[] = [
   },
   {
     role: "agent",
-    level: "sub-agen",
-    icon: Package,
-    label: "Masuk sebagai Sub-agen",
-    desc: "Rina Dewi · Kab. Sumedang · Level Sub-agen",
-    color: "bg-brand-100 text-brand-700",
-  },
-  {
-    role: "agent",
     level: "reseller",
     icon: Package,
     label: "Masuk sebagai Reseller",
-    desc: "Hendra S. · Kota Bandung · Level Reseller",
+    desc: "Raka Farma · binaan Nadia Putri · Level Reseller",
     color: "bg-brand-200 text-brand-800",
   },
   {

@@ -76,7 +76,7 @@ export default function AgenDashboard() {
             {loading ? (
               <SkeletonChart />
             ) : trend.length ? (
-              <SalesTrendChart data={trend} />
+              <SalesTrendChart data={trend} unit="pcs" />
             ) : (
               <div className="py-16 text-center text-sm text-slate-300">Belum ada data penjualan</div>
             )}

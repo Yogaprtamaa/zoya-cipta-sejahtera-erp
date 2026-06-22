@@ -36,7 +36,7 @@ const faqs = [
   { q: "Apakah saya perlu modal untuk mulai?", a: "Tidak. Sistem konsinyasi Zoya memungkinkan Anda menerima stok produk tanpa membayar di muka. Tagihan hanya muncul setelah produk terjual dan dilaporkan melalui portal." },
   { q: "Berapa lama proses verifikasi agen?", a: "Rata-rata kurang dari 24 jam. Tim admin kami akan memeriksa kelengkapan data dan mengirimkan notifikasi persetujuan via WhatsApp dan email." },
   { q: "Apa itu wilayah eksklusif?", a: "Setiap agen mendapatkan hak distribusi eksklusif untuk satu kabupaten/kota. Sistem kami otomatis mencegah dua agen aktif berada di wilayah yang sama, sehingga tidak ada perang harga antar mitra." },
-  { q: "Bagaimana sistem harga untuk agen?", a: "Harga bervariasi berdasarkan level kemitraan (Agen Utama, Sub-agen, Reseller). Semakin tinggi level, semakin besar margin yang Anda dapatkan. Tersedia juga override harga manual untuk mitra khusus." },
+  { q: "Bagaimana sistem harga untuk agen?", a: "Harga bervariasi berdasarkan level kemitraan (Agen, Reseller). Agen mendapat margin lebih besar dibanding reseller. Tersedia juga override harga manual untuk mitra khusus." },
 ];
 
 export default function LandingPage() {
@@ -307,7 +307,7 @@ export default function LandingPage() {
               <h3 className="mt-3 font-display text-base font-bold">Harga Bertingkat</h3>
               <p className="mt-1.5 text-xs font-medium leading-relaxed text-white/75">Tier harga otomatis per level agen dengan override manual per mitra.</p>
               <div className="mt-4 space-y-1 text-[9px] font-bold">
-                {["Agen Utama", "Sub-agen", "Reseller"].map((l) => (
+                {["Agen Utama", "Reseller"].map((l) => (
                   <div key={l} className="flex justify-between text-white/80"><span>{l}</span><span className="text-white/40">Login untuk lihat harga</span></div>
                 ))}
               </div>
