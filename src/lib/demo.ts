@@ -6,3 +6,10 @@ export const DEMO_PERIOD = "2026-06";
 /** Demo reseller binaan agent-001 — dipakai mode reseller di halaman Laporan Reseller. */
 export const DEMO_RESELLER_ID = "agent-005";
 export const DEMO_RESELLER_NAME = "Raka Farma";
+
+/** Demo klien maklon — dipakai di portal maklon (mirror maklon-portal page). */
+export const DEMO_CLIENT_ID = "mkl-client-002";
+export const DEMO_CLIENT_NAME = "CV Natura Herbal";
+
+/** Channel chat customer (web publik) untuk widget demo. */
+export const DEMO_CUSTOMER_CHANNEL = "chan-cust-sari";

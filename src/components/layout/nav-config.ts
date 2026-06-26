@@ -1,7 +1,7 @@
 import {
   LayoutDashboard, Package, ClipboardList, ShoppingCart, Boxes, Wallet, MapPinned, Gift, Undo2,
   MessagesSquare, Users, Warehouse, BarChart3, Scale, Briefcase, Bell, ScrollText, Settings, BadgeCheck,
-  FlaskConical, FileText,
+  FlaskConical, FileText, Store,
   type LucideIcon
 } from "lucide-react";
 
@@ -16,6 +16,7 @@ export const agenNav: NavSection[] = [
     { href: "/dashboard/penjualan", label: "Penjualan", icon: ShoppingCart },
     { href: "/dashboard/inventory", label: "Stok Saya", icon: Boxes },
     { href: "/dashboard/retur", label: "Retur", icon: Undo2 },
+    { href: "/dashboard/reseller", label: "Reseller Binaan", icon: Store },
     { href: "/dashboard/laporan-reseller", label: "Laporan Reseller", icon: FileText }
   ]},
   { label: "Keuangan & Wilayah", items: [
@@ -26,10 +27,24 @@ export const agenNav: NavSection[] = [
   { label: "Lainnya", items: [{ href: "/dashboard/chat", label: "Chat", icon: MessagesSquare }] }
 ];
 
+/** Menu reseller — jauh lebih ramping: reseller hanya menjual stok konsinyasi
+ * dari agen pembina lalu melapor. Tidak ada order PO, setoran, wilayah, reward,
+ * retur, atau pembinaan reseller (itu fitur level agen). */
+export const resellerNav: NavSection[] = [
+  { items: [{ href: "/dashboard", label: "Dashboard", icon: LayoutDashboard }] },
+  { label: "Operasional", items: [
+    { href: "/dashboard/produk", label: "Katalog & Harga", icon: Package },
+    { href: "/dashboard/inventory", label: "Stok Saya", icon: Boxes },
+    { href: "/dashboard/laporan-reseller", label: "Laporan Penjualan", icon: FileText }
+  ]},
+  { label: "Lainnya", items: [{ href: "/dashboard/chat", label: "Chat", icon: MessagesSquare }] }
+];
+
 export const adminNav: NavSection[] = [
   { items: [{ href: "/admin", label: "Dashboard", icon: LayoutDashboard }] },
   { label: "Mitra & Katalog", items: [
     { href: "/admin/agen", label: "Agen & Approval", icon: Users },
+    { href: "/admin/reseller", label: "Reseller", icon: Store },
     { href: "/admin/produk", label: "Produk & Harga", icon: Package },
     { href: "/admin/laporan-reseller", label: "Laporan Reseller", icon: FileText },
     { href: "/admin/maklon", label: "Maklon", icon: Briefcase }
@@ -57,5 +72,6 @@ export const maklonPortalNav: NavSection[] = [
   { items: [{ href: "/maklon-portal", label: "Dashboard Maklon", icon: FlaskConical }] },
   { items: [{ href: "/maklon-portal/konsultasi", label: "Ajukan Konsultasi", icon: FileText }] },
   { items: [{ href: "/maklon-portal/status", label: "Status Pipeline", icon: BadgeCheck }] },
-  { items: [{ href: "/maklon-portal/laporan", label: "Monitoring", icon: BarChart3 }] }
+  { items: [{ href: "/maklon-portal/laporan", label: "Monitoring", icon: BarChart3 }] },
+  { items: [{ href: "/maklon-portal/chat", label: "Chat Tim Maklon", icon: MessagesSquare }] }
 ];

@@ -1,6 +1,6 @@
 import type {
   Agent, Region, Product, Variant, PriceTier, PriceOverride, InventoryItem,
-  PurchaseOrder, Sale, MonthlyBilling, Return, MaklonLead, ChatMessage, Notification, AuditLog, Settings, InternalUser, ResellerReport
+  PurchaseOrder, Sale, MonthlyBilling, Return, MaklonLead, ChatMessage, ChatChannel, Notification, AuditLog, Settings, InternalUser, ResellerReport
 } from "@/types";
 
 /**
@@ -23,6 +23,7 @@ export type Db = {
   billings: MonthlyBilling[];
   returns: Return[];
   maklonLeads: MaklonLead[];
+  chatChannels: ChatChannel[];
   chat: ChatMessage[];
   notifications: Notification[];
   audit: AuditLog[];
@@ -121,9 +122,36 @@ function seed(): Db {
       { id: "MKL-0009", clientName: "Toko Barokah", productType: "Kapsul Habbatussauda", targetVolume: 8000, stage: "production", consultationStatus: "approved", contact: "Pak Hasan · 0856-5000-6000", value: 120000000 },
       { id: "MKL-0013", clientName: "CV Natura Herbal", productType: "Minuman Kesehatan / Herbal", targetVolume: 5000, stage: "consultation", consultationStatus: "pending", contact: "Ibu Sari · 0812-9999-8888", clientId: "mkl-client-002" }
     ],
+    chatChannels: [
+      // Customer (web publik) ↔ Zoya CS
+      { id: "chan-cust-sari", type: "customer_cs", customerName: "Bu Sari", escalated: false },
+      // Agen (Nadia / agent-001) ↔ Zoya CS
+      { id: "chan-agen-001", type: "agen_zoya", agentId: "agent-001", escalated: false },
+      // Reseller (Raka / agent-005) ↔ agen pembina (Nadia / agent-001)
+      { id: "chan-rsl-005-agen", type: "reseller_agen", resellerId: "agent-005", agentId: "agent-001", escalated: false },
+      // Reseller (Toko Sehat Jaya / agent-002) ↔ agen pembina (Nadia / agent-001)
+      { id: "chan-rsl-002-agen", type: "reseller_agen", resellerId: "agent-002", agentId: "agent-001", escalated: false },
+      // Reseller (Raka / agent-005) ↔ Zoya CS langsung
+      { id: "chan-rsl-005-cs", type: "reseller_cs", resellerId: "agent-005", escalated: false },
+      // Klien Maklon (CV Natura Herbal / mkl-client-002) ↔ Tim Maklon
+      { id: "chan-mkl-002", type: "maklon_cs", clientId: "mkl-client-002", escalated: false }
+    ],
     chat: [
-      { id: "msg-1", channelId: "chan-nadia", senderType: "customer", body: "Stok Madu Pahit masih ada?", attachmentUrl: null, createdAt: "2026-06-19T08:30:00" },
-      { id: "msg-2", channelId: "chan-nadia", senderType: "bot", body: "Halo! Stok Madu Pahit 100ml tersedia. Ada yang bisa kami bantu?", attachmentUrl: null, createdAt: "2026-06-19T08:30:05" }
+      // customer ↔ CS
+      { id: "msg-c1", channelId: "chan-cust-sari", senderType: "customer", body: "Halo, stok Madu Pahit 100ml masih ada?", attachmentUrl: null, createdAt: "2026-06-19T08:30:00" },
+      { id: "msg-c2", channelId: "chan-cust-sari", senderType: "bot", body: "Halo Bu Sari! Madu Pahit 100ml tersedia. Mau dibantu pesan ke agen terdekat?", attachmentUrl: null, createdAt: "2026-06-19T08:30:05" },
+      // agen ↔ Zoya
+      { id: "msg-a1", channelId: "chan-agen-001", senderType: "agent", body: "Min, PO-2026-0039 sudah dikirim belum ya?", attachmentUrl: null, createdAt: "2026-06-18T09:10:00" },
+      { id: "msg-a2", channelId: "chan-agen-001", senderType: "admin", body: "Sudah dikirim kemarin Bu Nadia, estimasi tiba besok.", attachmentUrl: null, createdAt: "2026-06-18T09:14:00" },
+      // reseller ↔ agen pembina
+      { id: "msg-ra1", channelId: "chan-rsl-005-agen", senderType: "reseller", body: "Bu Nadia, stok Madu 100ml saya tinggal sedikit, bisa minta tambahan?", attachmentUrl: null, createdAt: "2026-06-19T10:00:00" },
+      { id: "msg-ra2", channelId: "chan-rsl-005-agen", senderType: "agent", body: "Siap Pak Raka, besok saya kirim 20 pcs lagi ya.", attachmentUrl: null, createdAt: "2026-06-19T10:05:00" },
+      // reseller ↔ Zoya CS
+      { id: "msg-rc1", channelId: "chan-rsl-005-cs", senderType: "reseller", body: "Min, mau tanya cara baca laporan penjualan reseller.", attachmentUrl: null, createdAt: "2026-06-19T11:00:00" },
+      { id: "msg-rc2", channelId: "chan-rsl-005-cs", senderType: "bot", body: "Halo! Laporan penjualan bisa diisi dari menu Laporan Penjualan. Ada lagi yang bisa dibantu?", attachmentUrl: null, createdAt: "2026-06-19T11:00:04" },
+      // klien maklon ↔ tim maklon
+      { id: "msg-m1", channelId: "chan-mkl-002", senderType: "klien_maklon", body: "Untuk konsultasi formula minuman herbal, kapan bisa dijadwalkan?", attachmentUrl: null, createdAt: "2026-06-17T13:00:00" },
+      { id: "msg-m2", channelId: "chan-mkl-002", senderType: "bot", body: "Terima kasih CV Natura Herbal! Tim maklon akan menghubungi untuk penjadwalan konsultasi.", attachmentUrl: null, createdAt: "2026-06-17T13:00:06" }
     ],
     notifications: [
       { id: "ntf-1", targetId: "agent-001", channel: "whatsapp", eventType: "billing_issued", payload: "Tagihan Juni 2026 telah terbit", status: "delivered", sentAt: "2026-06-18T07:00:00" },
@@ -189,6 +217,14 @@ function seed(): Db {
 
 const globalForDb = globalThis as unknown as { __zoyaDb?: Db };
 export const db: Db = globalForDb.__zoyaDb ?? (globalForDb.__zoyaDb = seed());
+
+// Migrasi ringan: db lama yang masih tersimpan di memori (dari sesi dev sebelum
+// fitur chat channel) belum punya chatChannels — backfill agar API chat tidak error.
+if (!db.chatChannels) {
+  const fresh = seed();
+  db.chatChannels = fresh.chatChannels;
+  db.chat = fresh.chat;
+}
 
 export function resetDb() {
   globalForDb.__zoyaDb = seed();

@@ -6,17 +6,30 @@ export async function GET() {
   const agents = db.agents.map((a) => ({
     ...a,
     region: db.regions.find((r) => r.id === a.regionId)?.kabupaten ?? null,
+    parentName: a.parentId ? db.agents.find((p) => p.id === a.parentId)?.name ?? null : null,
     outstanding: db.billings.filter((b) => b.agentId === a.id && b.status !== "paid").reduce((s, b) => s + b.totalValue, 0)
   }));
   return ok({ agents });
 }
 
 export async function POST(req: Request) {
-  const input = await body<{ name: string; level?: AgentLevel; email?: string; phone?: string }>(req);
+  const input = await body<{ name: string; level?: AgentLevel; email?: string; phone?: string; parentId?: string | null; regionId?: string | null }>(req);
   if (!input.name) return fail("Nama agen wajib diisi", "VALIDATION_ERROR");
-  const agent = { id: uid("agent"), name: input.name, level: (input.level ?? "agen") as AgentLevel, parentId: null, regionId: null, status: "active" as const, email: input.email, phone: input.phone };
+  const level = (input.level ?? "agen") as AgentLevel;
+  if (level === "reseller" && !input.parentId) return fail("Reseller wajib dibuat oleh agen pembina", "VALIDATION_ERROR");
+  const agent = {
+    id: uid("agent"),
+    name: input.name,
+    level,
+    parentId: input.parentId ?? null,
+    regionId: input.regionId ?? null,
+    status: "active" as const,
+    email: input.email,
+    phone: input.phone,
+    createdAt: new Date().toISOString(),
+  };
   db.agents.push(agent);
-  logAudit("admin", "create_agent", "agent", agent.id, null, agent);
+  logAudit(input.parentId ?? "admin", level === "reseller" ? "create_reseller" : "create_agent", "agent", agent.id, null, agent);
   return ok({ agent });
 }
 

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { TopLoader } from "@/components/layout/top-loader";
 import { Package, Menu, X, Phone, Mail, MapPin, Instagram, Youtube } from "lucide-react";
 import { RoleSwitcher } from "@/components/layout/role-switcher";
+import { CustomerChatWidget } from "@/components/chat/customer-widget";
 
 const navLinks = [
   { href: "/", label: "Beranda" },
@@ -100,6 +101,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       </nav>
 
       {children}
+
+      <CustomerChatWidget />
 
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-6 py-14">

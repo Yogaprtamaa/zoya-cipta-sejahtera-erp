@@ -43,6 +43,7 @@ export type Agent = {
   status: AccountStatus;
   email?: string;
   phone?: string;
+  createdAt?: string;
 };
 
 export type Product = { id: string; name: string; isPrivate: boolean; clientId: string | null; category?: string };
@@ -117,13 +118,35 @@ export type MaklonLead = {
   notes?: string;
 };
 
+export type ChatSender = "customer" | "agent" | "reseller" | "klien_maklon" | "admin" | "bot";
+
 export type ChatMessage = {
   id: string;
   channelId: string;
-  senderType: "customer" | "agent" | "bot" | "admin";
+  senderType: ChatSender;
   body: string;
   attachmentUrl: string | null;
   createdAt: string;
+};
+
+/**
+ * A chat conversation between two parties. `type` fixes who talks to whom and
+ * how routing/bot behaves:
+ *  - customer_cs    : customer (web) ↔ Zoya CS (bot → admin)
+ *  - agen_zoya      : agen ↔ Zoya CS (bot → admin)
+ *  - reseller_agen  : reseller ↔ agen pembina (internal, no bot)
+ *  - reseller_cs    : reseller ↔ Zoya CS (bot → admin)
+ *  - maklon_cs      : klien maklon ↔ tim maklon/CS (bot → admin)
+ */
+export type ChatChannelType = "customer_cs" | "agen_zoya" | "reseller_agen" | "reseller_cs" | "maklon_cs";
+export type ChatChannel = {
+  id: string;
+  type: ChatChannelType;
+  agentId?: string | null;     // agen owner / pembina
+  resellerId?: string | null;  // reseller party
+  clientId?: string | null;    // klien maklon party
+  customerName?: string | null;// nama customer (web)
+  escalated: boolean;          // true = bot berhenti, ditangani CS/admin
 };
 
 export type Notification = {

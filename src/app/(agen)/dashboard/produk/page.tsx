@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { Package } from "lucide-react";
 import { api } from "@/lib/api-client";
-import { DEMO_AGENT_ID } from "@/lib/demo";
-import { getClientLevel } from "@/lib/auth-mock";
+import { DEMO_AGENT_ID, DEMO_RESELLER_ID } from "@/lib/demo";
+import { useClientLevel } from "@/lib/use-client-level";
 import { formatIdr } from "@/lib/format";
 import { PageHeader, Card, SkeletonTable, Badge } from "@/components/ui";
 
@@ -12,15 +12,15 @@ type Variant = { id: string; name: string; unit: string; price: number | null; s
 type Product = { id: string; name: string; category?: string; variants: Variant[] };
 
 export default function AgenProdukPage() {
+  const level = useClientLevel();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading]   = useState(true);
-  const [level, setLevel]       = useState("agen");
 
   useEffect(() => {
-    const level = getClientLevel();
-    setLevel(level);
-    api.get<{ products: Product[] }>(`/produk?role=agent&agentId=${DEMO_AGENT_ID}&level=${level}`).then((r) => { if (r.data) setProducts(r.data.products); setLoading(false); });
-  }, []);
+    setLoading(true);
+    const agentId = level === "reseller" ? DEMO_RESELLER_ID : DEMO_AGENT_ID;
+    api.get<{ products: Product[] }>(`/produk?role=agent&agentId=${agentId}&level=${level}`).then((r) => { if (r.data) setProducts(r.data.products); setLoading(false); });
+  }, [level]);
 
   return (
     <div className="space-y-6">

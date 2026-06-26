@@ -20,11 +20,15 @@ export const roleHome: Record<Role, string> = {
   admin: "/admin"
 };
 
+/** Fired whenever the mock session changes so client UI (nav, dashboard) can resync. */
+export const SESSION_EVENT = "zoya-session";
+
 /** Client-side: set the mock session cookies (used by the demo role switcher). */
 export function setSession(role: Role, status: AccountStatus = "active", level = "agen") {
   document.cookie = `${ROLE_COOKIE}=${role}; path=/; max-age=86400`;
   document.cookie = `${STATUS_COOKIE}=${status}; path=/; max-age=86400`;
   document.cookie = `${LEVEL_COOKIE}=${level}; path=/; max-age=86400`;
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(SESSION_EVENT));
 }
 
 /** Client-side: read current role from cookie. */

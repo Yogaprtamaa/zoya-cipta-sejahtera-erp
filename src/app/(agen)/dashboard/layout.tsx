@@ -1,9 +1,19 @@
 "use client";
 
 import { DashboardShell } from "@/components/layout/dashboard-shell";
-import { agenNav } from "@/components/layout/nav-config";
-import { DEMO_AGENT_NAME } from "@/lib/demo";
+import { agenNav, resellerNav } from "@/components/layout/nav-config";
+import { DEMO_AGENT_NAME, DEMO_RESELLER_NAME } from "@/lib/demo";
+import { useClientLevel } from "@/lib/use-client-level";
 
 export default function AgenLayout({ children }: { children: React.ReactNode }) {
-  return <DashboardShell workspace="Agen" userName={DEMO_AGENT_NAME} sections={agenNav}>{children}</DashboardShell>;
+  const isReseller = useClientLevel() === "reseller";
+  return (
+    <DashboardShell
+      workspace={isReseller ? "Reseller" : "Agen"}
+      userName={isReseller ? DEMO_RESELLER_NAME : DEMO_AGENT_NAME}
+      sections={isReseller ? resellerNav : agenNav}
+    >
+      {children}
+    </DashboardShell>
+  );
 }
